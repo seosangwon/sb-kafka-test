@@ -39,7 +39,7 @@ public class NotiService {
                             .relId(post.getId())
                             .typeCode("POST")
                             .type2Code("CREATED")
-                            .read(false)
+                            .readStatus(false)
                             .build();
 
 
