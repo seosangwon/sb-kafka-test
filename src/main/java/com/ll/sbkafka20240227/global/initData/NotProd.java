@@ -51,12 +51,6 @@ public class NotProd {
         Member memberUser1 = memberService.join("user1", "1234", "유저1").getData();
         Member memberUser2 = memberService.join("user2", "1234", "유저2").getData();
         Member memberUser3 = memberService.join("user3", "1234", "유저3").getData();
-
-        Author author1 = postService.of(memberUser1);
-        Author author2 = postService.of(memberUser2);
-
-        Post post1 = postService.write(author1, "제목1").getData();
-        Post post2 = postService.write(author2, "제목2").getData();
     }
 
     @Transactional

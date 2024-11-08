@@ -5,6 +5,7 @@ import com.ll.sbkafka20240227.domain.noti.noti.service.NotiService;
 import com.ll.sbkafka20240227.domain.post.post.entity.Author;
 import com.ll.sbkafka20240227.domain.post.post.entity.Post;
 import com.ll.sbkafka20240227.domain.post.post.repository.PostRepository;
+import com.ll.sbkafka20240227.global.dto.chat.ChatMessageDto;
 import com.ll.sbkafka20240227.global.event.PostCreatedEvent;
 import com.ll.sbkafka20240227.global.rsdata.RsData;
 import jakarta.persistence.EntityManager;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +31,7 @@ public class PostService {
     @PersistenceContext
     private EntityManager entityManager;
     private final ApplicationEventPublisher publisher;
+    private final KafkaTemplate<Object, Object> template;
 
 
     @Transactional
@@ -42,6 +45,7 @@ public class PostService {
                         .build()
         );
         publisher.publishEvent(new PostCreatedEvent(this,post));
+        template.send("chat-room-1", new ChatMessageDto(post.getId() + "번 글이 등록되었습니다"));
         return RsData.of(post);
     }
 
